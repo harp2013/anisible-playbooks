@@ -1,0 +1,33 @@
+---
+
+- name: Demonstrate Variables 2nd Method
+  hosts: web
+  become: yes
+  remote_user: root
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Install the Package
+      package:
+        name: "{{ pkg }}"
+        state: present
+      ignore_errors: true
+# package: name= {{ pkg }} state=present
+#    - name: Start the service
+#      service:
+#        name: "{{ pkg }}"
+#        state: started
+
+    - name: ensure nfs service is running (CentOS)
+      action: service name={{item}} state=started
+      tags:
+       - nfs
+      with_items:
+        - rpcsvcgssd
+        - rpcbind
+        - nfslock
+        - nfs
+
+
+...
+

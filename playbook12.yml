@@ -1,0 +1,25 @@
+---
+
+  - name: Discusee Jinja2 Template
+    hosts: node1_slave:node2_slave
+    remote_user: root
+    become: true
+    tasks:
+      - name: change the configuration
+        template:
+          src: httpd.conf.j2
+          dest: /etc/httpd/conf/httpd.conf
+          mode: 0755
+          owner: root
+          group: root
+          backup: true
+        notify: "restart httpd"
+
+    handlers:
+      - name: "restart httpd"
+        service: 
+          name: httpd
+          state: restarted
+...
+
+# handlers name is user-defined If there is space in between we need to use double quotes.

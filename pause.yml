@@ -1,0 +1,30 @@
+---
+- name: Showing reboot or wait for other hosts
+  hosts: web
+  become: true
+  remote_user: root
+  tasks:
+    - name: echo a message
+      debug: msg="This is my message."
+    
+    - name: pause the playbook
+      pause:
+        seconds: 30
+
+    - name: show another message
+      debug: msg="This is my message after pause."
+
+    - name: rebooting the server
+      shell: reboot
+      async: 300 # It is asking to wait for 300 s to complete the execution of the command.
+      poll: 10   # Every 10 s it checks whether the command fired is successful or not it can be 0 if it does not need a check
+    
+    - name: waiting for ssh port to be available
+      wait_for:
+        port: 22
+        timeout: 300
+    - name: display another message
+      debug: msg="This is my message after reboot."
+
+...
+

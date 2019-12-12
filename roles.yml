@@ -1,0 +1,8 @@
+---
+- name: install httpd using ansible role
+  hosts: web
+  become: true
+  remote_user: root
+  roles: 
+    - web
+...

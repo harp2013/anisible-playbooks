@@ -1,0 +1,17 @@
+---
+ - name: Show serial configuration change
+   hosts: web
+   remote_user: root
+   become: true
+   min_failures: 30%
+   serial:
+     - 5%
+     - 10%
+     - 85% 
+   tasks:
+     - name: install wen server
+       package: name=httpd state=latest
+...
+
+# We use % as we are not aware of total no. of servers also calculating the min. failure by numbers is hectic
+

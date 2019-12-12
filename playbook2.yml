@@ -1,0 +1,61 @@
+---
+- name: Installation of apache server
+  hosts: web
+  remote_user: root
+  become: true
+  tasks:
+    - name: Install httpd
+      package: name=httpd state=installed
+      tags: install
+
+    - include: service.yml
+      tags: install
+                
+    - name: change the index file contents
+      copy:
+        dest: /var/www/html/index.html
+        content: "My First Index File"
+        owner: root
+        group: root
+        mode: 0775
+      tags: modify
+
+    - name: Modifying the httpd configuration
+      template:
+        src: /root/Practice2/httpd.conf
+        dest: /etc/httpd/conf/httpd.conf
+        owner: root
+        group: root
+        mode: 0755
+        backup: true
+      notify: restart_httpd
+      tags: modify
+
+    - name: Create a directory
+      file:
+        path: /var/www/html/testdir
+        owner: root
+        group: root
+        mode: 0777
+        state: directory
+      tags: show
+
+    - name: Create test file inside testdir directory
+      file:
+        path: /var/www/html/testdir/testfile
+        owner: root
+        group: root
+        mode: 0755
+        state: touch
+      tags: show
+
+    - name: update the contents of the file
+      lineinfile:
+        path: /var/www/html/index.html
+        line: "this is my fourth line"
+      tags: show
+
+  handlers:
+    - name: restart_httpd
+      service: name=httpd state=restarted
+...

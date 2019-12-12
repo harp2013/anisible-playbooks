@@ -1,0 +1,14 @@
+---
+- name: Showing delegation
+  hosts: testservers
+  become: true
+  remote_user: root
+  tasks: 
+    - name: download a file
+      get_url:
+        url: https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.py
+#        dest: /root/Practice2/ec2.py
+        dest: "{{ lookup('env', 'USER') }}/"
+        mode: 0755
+      delegate_to: localhost
+...

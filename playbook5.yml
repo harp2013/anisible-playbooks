@@ -1,0 +1,23 @@
+---
+
+- name: Demonstrate Variables 3rd Method
+  hosts: web
+  become: yes
+  remote_user: root
+  vars_prompt:
+    name: pkg
+    prompt: "Enter the Package name to install:"
+    private: false
+
+  tasks:
+    - name: Install the Package
+      package:
+        name: "{{ pkg }}"
+        state: present
+      ignore_errors: true
+# package: name= {{ pkg }} state=present
+    - name: Start the service
+      service:
+        name: "{{ pkg }}"
+        state: started
+...

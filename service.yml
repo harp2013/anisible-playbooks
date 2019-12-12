@@ -1,0 +1,8 @@
+
+---
+- name: start the service
+  service:
+    name: httpd
+    state: started
+  ignore_errors: true
+...

@@ -1,0 +1,46 @@
+- name: Installation of apache server
+  hosts: web
+  remote_user: root
+  become: true
+  tasks:
+    - block: 
+        - name: Install httpd
+          package: name=httpd state=installed
+          tags: install
+
+        - name: start the service
+          service:
+            name: httpd
+            state: started
+          ignore_errors: true
+          tags: install
+    - block:
+        - name: Modifying the httpd configuration
+          template:
+            src: /root/Practice2/httpd.conf
+            dest: /etc/httpd/conf/httpd.conf
+            owner: root
+            group: root
+            mode: 0755
+            backup: true
+          notify: restart_httpd
+          tags: modify
+
+        - name: Create a directory
+          file:
+            path: /var/www/html/testdir
+            owner: root
+            group: root
+            mode: 0777
+            state: directory
+          tags: show
+    - block:
+        - name: Display some message.
+          debug: msg="This is test message."
+   
+  handlers:
+    - name: restart_httpd
+      service: name=httpd state=restarted
+
+...
+

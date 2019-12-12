@@ -1,0 +1,16 @@
+---
+- name: Explaining vault
+  remote_user: root
+  become: true
+  hosts: web
+  vars_files:
+    - pswd.yml
+#  vars_prompt:
+#    name: password
+#    prompt: "Enter the password"
+#    private: true
+  tasks:
+    - name: create user with password
+      user: name=ansibl password={{ pswd | password_hash('sha512') }}
+
+...

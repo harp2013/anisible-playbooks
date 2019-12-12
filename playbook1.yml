@@ -1,0 +1,14 @@
+---
+ - name: Very first playbook
+   become: yes
+   remote_user: root
+   hosts: web
+   gather_facts: false
+   tasks:
+     - name: ping my servers
+       ping:
+     - name: show me uptime
+       command: uptime
+     - name: show me date
+       shell: date
+...

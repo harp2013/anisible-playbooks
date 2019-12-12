@@ -1,0 +1,21 @@
+---
+
+- name: Demonstrate Variables 1st Method
+  hosts: web
+  become: yes
+  remote_user: root
+  vars:
+    - pkg: vsftpd
+  tasks: 
+    - name: Install the Package
+      package: 
+        name: "{{ pkg }}"
+        state: present
+# package: name= {{ pkg }} state=present
+    - name: Start the service 
+      service:
+        name: "{{ pkg }}"
+        state: started
+
+...
+

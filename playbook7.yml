@@ -1,0 +1,39 @@
+---
+- name: Discuss about conditions
+  hosts: web:db
+  remote_user: root
+  tasks:
+    - name: install httpd server
+      package: name=httpd state=installed
+      when: ansible_hostname=="node1"
+
+    - name: install httpd server
+      package: name=httpd state=installed
+      when: ansible_hostname=="node2"
+    
+    - name: starting the service
+      service: name=httpd state=started
+      when: ansible_hostname=="node1"
+
+#    - name: starting the service
+#      service: name=httpd state=started
+#      when: ansible_hostname=="node2" and ansible_nodename=="node2.slave.com" 
+
+#Also we can write the "and" operator like below:
+    - name: starting the service
+      service: name=httpd state=started
+      when: 
+        - ansible_hostname=="node2" 
+        - ansible_processor_cores > 2
+# For OR operator we can wite as:
+    - name: starting the service
+      service: name=httpd state=started
+      when:
+        - (ansible_hostname=="node3") or (ansible_memory_mb.real.free > 700)
+#        - ansible_processor_cores > 2
+
+
+
+
+...
+

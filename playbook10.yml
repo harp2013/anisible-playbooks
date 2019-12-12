@@ -1,0 +1,20 @@
+---
+- name: Condition part 3
+  hosts: web
+  remote_user: root
+  become: true
+  tasks:
+    - block:  
+        - name: check if httpd is installed
+          shell: yum list installed httpd warn=false
+        
+        - name: display message
+          debug: msg="this is message"
+       
+      rescue:
+        - name: install httpd
+          package: name=httpd state=installed
+        
+        - name: start the service
+          service: name=httpd state=started
+...

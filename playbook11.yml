@@ -1,0 +1,20 @@
+---
+- name: Showing Loops 
+  hosts: web
+  become: true
+  remote_user: root
+  tasks:
+    - name: install httpd
+      package: name={{ item }} state=installed
+      with_items:
+        - httpd
+        - wget
+        - git
+    - name: Create users
+      user: name={{ item }} state=present
+      with_items:
+        - user100
+        - user200
+        - user300
+        - user400
+...

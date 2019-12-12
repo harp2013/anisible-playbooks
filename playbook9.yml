@@ -1,0 +1,24 @@
+---
+- name: Condition part 3
+  hosts: web
+  remote_user: root
+  become: true
+  tasks:
+    - name: check if httpd is installed
+      shell: yum list installed httpd warn=false
+      register: httpd_output
+      ignore_errors: true
+
+#    - name: show output of httpd variable
+#      debug: var=httpd_output
+    
+    - block:
+        - name: install httpd
+          package: name=httpd state=installed
+  
+        - name: start the service 
+          service: name=httpd state=started
+#      when: httpd_output.rc != 0 
+      when: httpd_output.failed is defined
+
+...
